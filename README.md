@@ -11,12 +11,21 @@ merge(collection1: number[], collection2: number[], collection3: number[]): numb
 
 ## How it works
 
-1. `collection3` is read **from its last index backwards**, so it behaves like an ascending array. Nothing is reversed or copied.
-2. Three pointers (`i`, `j`, `k`) point at the current smallest unused value of each array.
-3. Each step compares the three current values, pushes the smallest into the result, and moves that pointer forward (or backward for `collection3`).
-4. An exhausted array contributes `Infinity`, so it is never picked.
+The function uses three iterators (array indexes), like C++ iterators:
 
-Complexity: **O(n1 + n2 + n3)** time, linear in the total number of elements. Compare that with O(n log n) for concatenating everything and sorting.
+- `it1` and `it2` start at **begin** (index 0) of `v1` and `v2` and move forward.
+- `it3` starts at **end** (`v3.length`) of `v3` and moves backward. As with a C++ `end()` iterator, it points one past the element it reads, so its current value is `v3[it3 - 1]`. Reading `v3` backwards turns its descending order into ascending order.
+
+```ts
+while (it1 !== v1.length || it2 !== v2.length || it3 !== 0) {
+  // 1) if v1 has data -> m = v1[it1]
+  // 2) if v2 has data -> compare with m, keep the smaller
+  // 3) if v3 has data -> compare with m, keep the smaller
+  // push m, then move the iterator that m came from
+}
+```
+
+The loop runs while at least one iterator still points at data. Complexity is **O(n1 + n2 + n3)**, linear in the total number of elements.
 
 ## Requirements
 
