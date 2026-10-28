@@ -1,38 +1,22 @@
-/**
- * Merge three sorted arrays into one array sorted ascending.
- *
- * - v1, v2: sorted ascending (min -> max)
- * - v3:     sorted descending (max -> min)
- *
- * No sort function is used.
- *
- * Iterators (array indexes, C++ style):
- * - it1, it2 start at begin (0) and move forward until they reach end (length).
- * - it3 starts at end (v3.length) and moves backward until it reaches begin (0).
- *   Like a C++ iterator at end(), it3 points one past the element it reads,
- *   so the current value of v3 is v3[it3 - 1].
- *
- * Time: O(n1 + n2 + n3)
- */
 export function merge(v1: number[], v2: number[], v3: number[]): number[] {
   const result: number[] = [];
 
-  let it1 = 0; // v1.begin()
-  let it2 = 0; // v2.begin()
-  let it3 = v3.length; // v3.end()
+  let it1 = 0; //ชี้ตัวแรก v1
+  let it2 = 0; //ชี้ตัวแรก v2
+  let it3 = v3.length; //ชี้ตัวท้าย v3
 
-  // Keep going while at least one iterator still points at data.
-  while (it1 !== v1.length || it2 !== v2.length || it3 !== 0) {
-    let m = 0; // the smallest value found this round
-    let from = 0; // which array m came from: 1, 2 or 3 (0 = none yet)
+  //loop จนกว่า ข้อมูลจะหมด
+  while (it1 !== v1.length || it2 !== v2.length || it3 !== 0) { 
+    let m = 0; //รอเก็บตัวน้อยสุด
+    let from = 0; // มาจาก array ไหน
 
-    // 1) If v1 still has data, take its value as m.
+    // v1 มีค่าไหม ถ้ามีเก็บค่าใน m เลย
     if (it1 !== v1.length) {
       m = v1[it1];
       from = 1;
     }
 
-    // 2) If v2 still has data, compare it with m.
+    // v2 มีค่าไหม ถ้ามีเทียบกับตัวแรก ถ้าน้อยกว่า เก็บค่า v2[it2] ใน m แทน
     if (it2 !== v2.length) {
       if (from === 0 || v2[it2] < m) {
         m = v2[it2];
@@ -40,7 +24,7 @@ export function merge(v1: number[], v2: number[], v3: number[]): number[] {
       }
     }
 
-    // 3) If v3 still has data, compare it with m.
+    // v3 มีค่าไหม ถ้ามีเทียบกับ m ถ้าน้อยกว่า เก็บค่า v3[it3] ใน m แทน
     if (it3 !== 0) {
       if (from === 0 || v3[it3 - 1] < m) {
         m = v3[it3 - 1];
@@ -48,8 +32,9 @@ export function merge(v1: number[], v2: number[], v3: number[]): number[] {
       }
     }
 
-    // Add m to the result and move the iterator it came from.
+    // push ตัวน้อยที่สุดเข้า array 
     result.push(m);
+    // เช็คว่าดึงจากใครมา และ ขยับ it ตัวนั้น
     if (from === 1) {
       it1++;
     } else if (from === 2) {
